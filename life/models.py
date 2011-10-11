@@ -166,10 +166,23 @@ class Property(models.Model):
 		verbose_name_plural = "Properties"
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 # CMS related data from now on
 
 class Page(models.Model):
-	name = models.CharField(max_length = 30)
+	name = models.CharField(max_length = 50)
 	lang = models.ForeignKey('Language')
 	first_row = models.ForeignKey('ContentName', related_name="first_row_of")
 	second_row = models.ForeignKey('ContentName', related_name="second_row_of")
@@ -224,19 +237,30 @@ class EmptyRow(models.Model):
 		return u'empty'
 
 class ThreePictureRow(models.Model):
+	title = models.CharField(max_length = 30)
+	desc = models.TextField()
 	pic1 = models.ImageField(upload_to = 'images/picrows')
+	label1 = models.CharField(max_length = 20)
 	pic2 = models.ImageField(upload_to = 'images/picrows')
+	label2 = models.CharField(max_length = 20)
 	pic3 = models.ImageField(upload_to = 'images/picrows')
+	label3 = models.CharField(max_length = 20)
 	name = models.OneToOneField('ContentName')
 
 	def __unicode__(self):
 		return unicode(self.name.name)
 
 class FourPictureRow(models.Model):
+	title = models.CharField(max_length = 30)
+	desc = models.TextField()
 	pic1 = models.ImageField(upload_to = 'images/picrows')
+	label1 = models.CharField(max_length = 20)
 	pic2 = models.ImageField(upload_to = 'images/picrows')
+	label2 = models.CharField(max_length = 20)
 	pic3 = models.ImageField(upload_to = 'images/picrows')
+	label3 = models.CharField(max_length = 20)
 	pic4 = models.ImageField(upload_to = 'images/picrows')
+	label4 = models.CharField(max_length = 20)
 	name = models.OneToOneField('ContentName')
 
 	def __unicode__(self):
@@ -245,11 +269,12 @@ class FourPictureRow(models.Model):
 media_type_choices = (('v', 'Video'), ('i', 'Image'))
 
 class RealMedia(models.Model):
-	media_type = models.CharField(max_length = 1)
+	name = models.CharField(max_length = 30, unique = True)
+	media_type = models.CharField(max_length = 1, choices = media_type_choices)
 	media = models.FileField(upload_to = 'tabbed_media')
 
 	def __unicode__(self):
-		return unicode(self.media)
+		return unicode(self.name)
 
 class TabbedMedia(models.Model):
 	name = models.ForeignKey('ContentName')

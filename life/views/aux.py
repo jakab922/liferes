@@ -56,3 +56,83 @@ def add_map_details(template_dict):
 
 	template_dict['property_coords'] = coords
 	return template_dict
+
+def add_rows(template_dict, page_name):
+	print 'got called with page name:', page_name
+	page = Page.objects.filter(name = page_name, lang__lang_code = template_dict['curr_lang_code'])[0]
+
+	names = []
+	if page.first_row.name != 'empty':
+		names.append(page.first_row.name)
+	if page.second_row.name != 'empty':
+		names.append(page.second_row.name)
+	if page.third_row.name != 'empty':
+		names.append(page.third_row.name)
+	if page.forth_row.name != 'empty':
+		names.append(page.forth_row.name)
+	if page.fifth_row.name != 'empty':
+		names.append(page.fifth_row.name)
+	if page.sixth_row.name != 'empty':
+		names.append(page.sixth_row.name)
+
+	results = []
+
+	for name in names:
+		res = OneColumnRow.objects.filter(name__name = name)
+		if len(res) != 0:
+			results.append(('onecol', res[0]))
+			continue
+		res = TwoColumnRow.objects.filter(name__name = name)
+		if len(res) != 0:
+			results.append(('twocol', res[0]))
+			continue
+		res = ThreeColumnRow.objects.filter(name__name = name)
+		if len(res) != 0:
+			results.append(('threecol', res[0]))
+			continue
+		res = ThreePictureRow.objects.filter(name__name = name)
+		if len(res) != 0:
+			results.append(('threepic', res[0]))
+			continue
+		res = FourPictureRow.objects.filter(name__name = name)
+		if len(res) != 0:
+			results.append(('fourpic', res[0]))
+			continue
+		res = TabbedMedia.objects.filter(name__name = name)
+		if len(res) != 0:
+			res[0].media = []
+
+			if res[0].media1.name != 'empty':
+				if res[0].media1.media_type == 'i':
+					res[0].media.append(('image', res[0].media1.media))
+				else:
+					res[0].media.append(('video', res[0].media1.media))
+
+			if res[0].media2.name != 'empty':
+				if res[0].media2.media_type == 'i':
+					res[0].media.append(('image', res[0].media2.media))
+				else:
+					res[0].media.append(('video', res[0].media2.media))
+
+			if res[0].media3.name != 'empty':
+				if res[0].media3.media_type == 'i':
+					res[0].media.append(('image', res[0].media3.media))
+				else:
+					res[0].media.append(('video', res[0].media3.media))
+
+			if res[0].media4.name != 'empty':
+				if res[0].media4.media_type == 'i':
+					res[0].media.append(('image', res[0].media4.media))
+				else:
+					res[0].media.append(('video', res[0].media4.media))
+
+			if res[0].media5.name != 'empty':
+				if res[0].media5.media_type == 'i':
+					res[0].media.append(('image', res[0].media5.media))
+				else:
+					res[0].media.append(('video', res[0].media5.media))
+			
+			results.append(('tabbed', res[0]))
+
+	template_dict['rows'] = results
+	return template_dict

@@ -1,0 +1,85 @@
+{% for row in rows %}
+
+{% if row.0 == 'onecol' %}
+<div class="row_1col" >
+	<div class="col" >
+		<h3>{{ row.1.title }}</h3>
+		<p>{{ row.1.column }}</p>
+	</div>
+</div>
+{% else %}{% if row.0 == 'twocol' %}
+<div class="row_2col" >
+	<div class="col" >
+		<h3>{{ row.1.title1 }}</h3>
+		<p>{{ row.1.column1 }}</p>
+	</div>
+	<div class="col" >
+		<h3>{{ row.1.title2 }}</h3>
+		<p>{{ row.1.column2 }}</p>
+	</div>
+</div>
+{% else %}{% if row.0 == 'threecol' %}
+<div class="row_3col" >
+	<div class="col" >
+		<h3>{{ row.1.title1 }}</h3>
+		<p>{{ row.1.column1 }}</p>
+	</div>
+	<div class="col" >
+		<h3>{{ row.1.title2 }}</h3>
+		<p>{{ row.1.column2 }}</p>
+	</div>
+	<div class="col" >
+		<h3>{{ row.1.title3 }}</h3>
+		<p>{{ row.1.column3 }}</p>
+	</div>
+</div>
+{% else %}{% if row.0 == 'threepic' %}
+<div class="row_3pics" >
+	<h3>{{ row.1.title }}</h3>
+	<p>{{ row.1.desc }}</p>
+	<ul>
+		<li><img src="{{ MEDIA_URL }}{{ row.1.pic1 }}"><strong>{{ row.1.label1 }}</strong></li>
+		<li><img src="{{ MEDIA_URL }}{{ row.1.pic2 }}"><strong>{{ row.1.label2 }}</strong></li>
+		<li><img src="{{ MEDIA_URL }}{{ row.1.pic3 }}"><strong>{{ row.1.label3 }}</strong></li>
+	</ul>
+</div>
+{% else %}{% if row.0 == 'fourpic' %}
+<div class="row_4pics" >
+	<h3>{{ row.1.title }}</h3>
+	<p>{{ row.1.desc }}</p>
+	<ul>
+		<li><img src="{{ MEDIA_URL }}{{ row.1.pic1 }}"><strong>{{ row.1.label1 }}</strong></li>
+		<li><img src="{{ MEDIA_URL }}{{ row.1.pic2 }}"><strong>{{ row.1.label2 }}</strong></li>
+		<li><img src="{{ MEDIA_URL }}{{ row.1.pic3 }}"><strong>{{ row.1.label3 }}</strong></li>
+		<li><img src="{{ MEDIA_URL }}{{ row.1.pic4 }}"><strong>{{ row.1.label4 }}</strong></li>
+	</ul>
+</div>
+{% else %}{% if row.0 == 'tabbed' %}
+<div class="feature" >
+	<ul class="tabs" >
+		{% for media in row.1.media %}
+		<li class="pictures{% if forloop.first %} selected{% endif %}" >{% if media.0 == 'video' %}Video{% else %}Picture{% endif %}</li>
+		{% endfor %}
+	</ul>
+	
+	{% for media in row.1.media %}
+	{% if media.0 == 'video' %}
+	<video src="{{ MEDIA_URL }}{{ media.1 }}" width="698" height="383" {% if not forloop.first %}style="display: none;"{% endif %} ></video>
+	{% else %}
+	<img src="{{ MEDIA_URL }}{{ media.1 }}" {% if not forloop.first %}style="display: none;"{% endif %}></img>
+	{% endif %}
+	{% endfor %}
+
+	{% comment %}
+	TODO: add javascript so tabs can be changed...
+	{% endcomment %}
+</div>
+{% endif %}
+{% endif %}
+{% endif %}
+{% endif %}
+{% endif %}
+{% endif %}
+
+
+{% endfor %}
