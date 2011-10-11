@@ -1,3 +1,6 @@
+from life.views.aux import *
+from life.models import *
+
 def search(request, lang_code):
 	template_dict = generate_base_dict(lang_code, '/search/')
 	if request.method == 'POST':
