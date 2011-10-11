@@ -1,3 +1,7 @@
+from life.views.aux import *
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+
 def city_guide(request, area, lang_code):
 	if area not in ['central']:
 		area = 'all'

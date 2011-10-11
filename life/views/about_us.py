@@ -1,4 +1,6 @@
-
+from life.views.aux import *
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 
 def about_us(request, subpage, lang_code):
 	if subpage not in ['recruitment', 'our_staff']:
@@ -27,7 +29,9 @@ def about_us(request, subpage, lang_code):
 		
 	template_dict = add_staff(template_dict)
 	template_dict = add_testimonials(template_dict)
-	if subpage == 'our_staff':
-		template_dict['offices'] = [OfficeDummy(range(1,3)) for i in range(2)]
+	
+	# TODO: Staff need to be generated somehow
+	#if subpage == 'our_staff':
+	#	template_dict['offices'] = [OfficeDummy(range(1,3)) for i in range(2)]
 	
 	return render_to_response('pages/about_us.html', template_dict, context_instance = RequestContext(request))

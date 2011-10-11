@@ -2,6 +2,8 @@ from django.shortcuts import render_to_response, redirect
 from life.views.aux import *
 from life.models import Property, PropertyCoordinate, PropertyDescription, PropertyThumbnail
 from re import sub, match
+from json import loads as parse_json
+from django.template import RequestContext
 
 def detail(request, lang_code, prop_id):
 	template_dict = generate_base_dict(lang_code, '/detail/')
