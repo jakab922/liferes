@@ -1,0 +1,276 @@
+<!-- TODO: The page need to be generated automatically. -->
+{% extends "skeleton_page.html" %}
+
+{% block container_class %}page detail{% endblock %}
+
+{% load element_translator %}
+{% block before_content %}
+
+<div id="header">
+	
+	<div class="result_bar detail">
+		<a class="prev">&lt; {% gettext detail-Previous_property %}</a>
+		<ul class="detail_options">
+			<li class="selected"><a href="#" id="detail-image_link">{% gettext detail-Photos %}</a> |</li>
+			<li><a href="#" id="detail-map_link">{% gettext detail-Map %}</a> |</li>
+			<li><a href="#" id="detail-floorplan_link">{% gettext detail-Floorplan %}</a></li>
+			<script type="text/javascript">
+				$('a#detail-image_link').click(function (event) {
+					event.preventDefault();
+					$('div#map_holder').hide();
+					$('div#floorplan_holder').hide();
+					$('div#image_holder').show();
+					$('a#detail-map_link').parent().removeClass('selected');
+					$('a#detail-floorplan_link').parent().removeClass('selected');
+					$('a#detail-image_link').parent().addClass('selected');
+				});
+
+				var map_not_loaded = true;
+
+				$('a#detail-map_link').click(function (event) {
+					event.preventDefault();
+					if (map_not_loaded) {
+						map_not_loaded = false;
+						map_loader();
+					};
+					$('div#map_holder').show();
+					$('div#floorplan_holder').hide();
+					$('div#image_holder').hide();
+					$('a#detail-map_link').parent().addClass('selected');
+					$('a#detail-floorplan_link').parent().removeClass('selected');
+					$('a#detail-image_link').parent().removeClass('selected');
+				});
+
+				$('a#detail-floorplan_link').click(function (event) {
+					event.preventDefault();
+					$('div#map_holder').hide();
+					$('div#floorplan_holder').show();
+					$('div#image_holder').hide();
+					$('a#detail-map_link').parent().removeClass('selected');
+					$('a#detail-floorplan_link').parent().addClass('selected');
+					$('a#detail-image_link').parent().removeClass('selected');
+				});
+			</script>
+		</ul>
+		<a class="next">{% gettext detail-Next_property %} &gt;</a>
+		<a class="back">{% gettext detail-Back_to_search_results %}</a>
+	</div>
+
+</div> <!-- end of: header -->
+
+<script type="text/javascript">
+{% if property_ids %}
+var property_ids = {{ property_ids }};
+{% else %}
+var property_ids = [];
+{% endif %}
+var curr_property_id = {{ curr_property_id }};
+var curr_lang_code = '{{ curr_lang_code }}';
+
+
+$(window).load(function () {
+	$('div#map_holder').hide();
+	$('div#floorplan_holder').hide();
+
+	if(property_ids.length == 0) {
+		console.log('bubba')
+		$('a.prev').css('visibility', 'hidden');
+		$('a.next').css('visibility', 'hidden');
+		$('a.back').css('visibility', 'hidden');
+	} else {
+		if(property_ids.indexOf(curr_property_id) == 0) {
+			$('a.prev').css('visibility', 'hidden');
+		} else {
+			$('a.prev').click(function () {
+				submitter('/' + curr_lang_code + '/detail/' + property_ids[property_ids.indexOf(curr_property_id) - 1] + '/', 'property_ids', "[" + property_ids.join(', ') + "]");	
+			});
+		}
+
+		if(property_ids.indexOf(curr_property_id) == property_ids.length - 1) {
+			$('a.next').css('visibility', 'hidden');
+		} else {
+			$('a.next').click(function () {
+				submitter('/' + curr_lang_code + '/detail/' + property_ids[property_ids.indexOf(curr_property_id) + 1] + '/', 'property_ids', "[" + property_ids.join(', ') + "]");
+			});
+		}
+
+		$('a.back').click(function () {
+			submitter("/{{ curr_lang_code}}/search/", "shortlist_ids", "[" + property_ids.join(', ') + "]");	
+		});
+	}
+});
+
+</script>
+
+{% endblock %}
+
+{% block real_content_id %}detail{% endblock %}
+
+{% block real_content %}{% endblock %}
+
+{% block different_content %}
+
+<div id="detail">
+
+	<div class="row" id="row1">
+	
+		<div id="map"><!-- TODO: These images shouldn't be stored in static since they will be uploaded via the admin interface. -->		
+			<div id="image_holder">
+				<img id="big_image_1" src="{{ MEDIA_URL }}{{ big_images.0 }}" alt="Detail Image" >
+				<ul class="thumbnails">
+					{% for image in small_images %}
+					<li class="image_thumb"><a href="#"	><img src="{{ MEDIA_URL }}{{ image }}" alt="" id="small_image_{{ forloop.counter }}"></a></li>
+					{% endfor %}
+				</ul>
+			</div>
+			<div id="map_holder" style="height: 501; width: 698;"></div>
+			<script type="text/javascript">
+				function map_loader() {
+					var curr_property_coord = [{{ curr_property_coord.0 }}, {{ curr_property_coord.1 }}];
+					var latlng = new google.maps.LatLng(curr_property_coord[0], curr_property_coord[1]);
+					var options = {
+						zoom: 14,
+						center: latlng,
+						mapTypeId: google.maps.MapTypeId.HYBRID
+					};
+					var map = new google.maps.Map($('div#map_holder').get(0), options);
+
+					{% if property_ids %}
+						property_coords = [{% for coord in property_coords %}{{ coord }}{% if not forloop.last %}, {% endif %}{% endfor %}];
+						for(var i = 0; i < property_ids.length; i++) {
+							if(property_ids[i] != curr_property_id) {
+								latlng = new google.maps.LatLng(property_coords[2 * i], property_coords[2 * i + 1]);
+								marker = new google.maps.Marker({position: latlng, map: map, title: 'No title', icon: 'https://chart.googleapis.com/chart?chst=d_map_pin_icon&chld=home|ffffff|000000'});
+								marker.property_id = property_ids[i];
+								google.maps.event.addListener(marker, 'click', function() {
+									var form = document.createElement("form");
+									form.setAttribute("method", "POST");
+									form.setAttribute("action", "/{{ curr_lang_code}}/detail/" + this.property_id + "/");
+
+									var hidden = document.createElement('input');
+									hidden.setAttribute("type", "hidden");
+									hidden.setAttribute("name", "property_ids");
+									hidden.setAttribute("value", "[" + property_ids.join(', ') + "]");
+									form.appendChild(hidden);
+
+									var csrf = document.createElement('input');
+									csrf.setAttribute("type", "hidden");
+									csrf.setAttribute("name", "csrfmiddlewaretoken");
+									csrf.setAttribute("value", csrf_token);	
+									form.appendChild(csrf);
+									
+									form.submit();
+								});
+							}
+						}
+					{% endif %}
+
+					latlng = new google.maps.LatLng(curr_property_coord[0], curr_property_coord[1]);
+					marker = new google.maps.Marker({position: latlng, map: map, title: 'No title', icon: 'https://chart.googleapis.com/chart?chst=d_map_pin_icon&chld=home|f89829|000000'});
+				};
+			</script>
+			<div id="floorplan_holder" style="height: 501; width: 698;" ></div>
+		</div> <!-- end of: map -->
+		{% for image in big_images %}
+			<div style="display: none" id="holder_for_image_{{ forloop.counter }}">
+				{% if not forloop.first %}
+				<img id="big_image_{{ forloop.counter }}" src="{{ MEDIA_URL }}{{ image }}" alt="Detail Image" >
+				{% endif %}
+			</div> 
+		{% endfor %}
+		<script type="text/javascript">
+			$(window).load(function () {
+				$('.image_thumb').each(function () {
+					$(this).click(function () {
+						var reg = /small_image_([0-9]+)/g;
+						match = reg.exec($(this).find('a img').attr('id'));
+						var num = match[1];
+
+						reg = /big_image_([0-9]+)/g;
+						match = reg.exec($('div#map img:first').attr('id'));
+						var old_num = match[1];
+
+						// Put the old image away
+						$('div#holder_for_image_' + old_num).append($('div#map div#image_holder img:first'));
+
+						// Bring the new one in
+						$('div#map div#image_holder').prepend($('div#holder_for_image_' + num + ' img'));
+					});
+				});
+			});
+		</script>
+
+		{% include "elements/searchboxes/form.html" %}
+	
+	</div><!-- end of: row 1 -->
+
+	<div id="sharebar" class="row">
+		<ul class="share">
+			<li><a href="#"><img src="{{ STATIC_URL }}images/love_icon.png" alt="{% gettext detail-love_alt %}"> {% gettext detail-love_text %}</a></li>
+			<li><a href="mailto:"><img src="{{ STATIC_URL }}images/email_icon.png" alt="{% gettext detail-email-alt %}"> {% gettext detail-email_text %}</a></li>
+			<li><a href="#"><img src="{{ STATIC_URL }}images/print_icon.png" alt="{% gettext detail-print_alt %}"> {% gettext detail-print_text %}</a></li>
+			<li><a href="#"><img src="{{ STATIC_URL }}images/facebook_icon.png" alt="{% gettext detail-facebook_alt %}"> {% gettext detail-facebook_text %}</a></li>
+			<li><a href="#"><img src="{{ STATIC_URL }}images/twitter_icon_black.png" alt="{% gettext detail-twitter_alt %}"> {% gettext detail-twitter_text %}</a></li>
+		</ul>
+	</div> <!-- end of: sharebar -->
+
+	<div class="row" id="row3"> <!-- TODO: This part should be generated automatically. -->
+	
+		<div class="col1">
+			<h2>{% gettext detail-Property_Details %}</h2>
+			<p><strong>{% gettext detail-Property_Ref_No %} {{ property.property_id }}</strong></p>
+			<p>{{ property.description }}</p>
+		</div>
+	
+		<div class="col2">
+			<h2>This part can't be generated!!!!</h2>
+			<ul>
+				<li>16th Floor</li>
+				<li>Two bedroom/two bathroom (one en-suite)</li>
+				<li>London's newest prestigious residential skyscraper</li>
+				<li>Breathtaking views taking in all famous landmarks</li>
+				<li>Moments from Underground station</li>
+			</ul>
+
+			<h2>Local Information</h2>
+			<ul>
+				<li>Nearest Town Centre: 0.5m</li>
+				<li>Nearest School: 0.3m</li>
+				<li>Nearest Tube Station: 0.3m</li>
+			</ul>
+		</div>
+	
+		<div id="faq" class="col3">
+		
+			{% include "elements/reusable/faq_links.html" %}
+
+		</div> <!-- end of: faq -->
+	
+	</div> <!-- end of: row3 -->
+
+	<div class="row" id="row4"> <!-- TODO: Need to be generated automatically from the property and staff models -->
+	
+		<div class="col1">
+			<img src="{{ STATIC_URL }}images/staff_photo4.jpg" alt="Staff Member">
+		</div>
+	
+		<div class="col2">
+			<p><strong>Call Debbie to arrange a viewing on</strong></p>
+			<p><strong><span class="phone">+44 (0)208 896 9990</span> or...</strong></p>
+		</div>
+	
+		<div class="col3">
+			<p class="email"><img src="{{ STATIC_URL }}images/email_icon.png" alt="{% gettext detail-contact_by_email_alt %}"> <strong><a href="#">{% gettext detail-contact_by_email_text %}</a></strong></p>
+		</div>
+	
+	</div> <!-- end of: row4 -->
+	
+</div> <!-- end of: detail -->
+
+{% endblock %}
+
+{% block sidebar_content %}{% endblock %}
+
+{% block after_content %}{% endblock %}
+
+{% block after_container %}{% endblock %}

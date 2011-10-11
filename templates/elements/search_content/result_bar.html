@@ -1,0 +1,40 @@
+{% load element_translator %}
+<div class="{{ master_class }}">
+
+	<div class="per_page">
+		<label for="per_page">{% gettext search-Properties_per_page %}</label>
+		<select name="per_page">
+			{% for res in result_per_page_dict %}
+			<option {% if res.0 == default_result_per_page %} selected="selected" {% endif %} value="{{ res.0 }}" name="result_per_page">{{ res.1 }}</option>
+			{% endfor %}
+		</select>
+	</div>
+
+	<div class="sort_by">
+		<label for="sort_by">{% gettext search-Sort_by %}</label>
+		<select name="sort_by">
+			{% for key,val in ordering_dict.items %}
+			<option {% if key == default_ordering %} selected="selected" {% endif %} value="{{ key }}" name="ordering">{{ val }}</option>
+			{% endfor %}
+		</select>
+	</div>
+
+	<div class="pagination">
+		<ul>
+			<li class="prev" ><a href="" >&lt; {% gettext pagination-Prev %}</a></li>
+			{% for i in search_results %}
+				{% if forloop.first %}
+					<li class="page_number selected" style="display: none;" ><a href="">{{ forloop.counter }}</a></li>
+				{% else %}
+					<li class="page_number" style="display: none;" ><a href="">{{ forloop.counter }}</a></li>
+				{% endif %}
+			{% endfor %}
+			<li class="next" ><a href="" >{% gettext pagination-Next %} &gt;</a></li>
+		</ul>
+	</div>
+	
+	<div class="search_by_map">
+		<a href="#">{% gettext pagination-View_results_by_map %}</a>
+	</div>
+	
+</div> <!-- end of: result_bar -->

@@ -1,0 +1,46 @@
+{% extends "skeleton_page.html" %}
+
+{% block container_class %}{{ container_class }}{% endblock %}
+
+{% block before_content %}{% endblock %}
+
+{% block real_content_id %}{{ real_content_id }}{% endblock %}
+
+{% block real_content %}
+
+{% include content_name %}
+
+{% endblock %}
+
+{% block sidebar_content %}
+
+{% include "elements/searchboxes/about_us.html" %}
+
+{% include "elements/reusable/iphone_app.html" %}
+
+{% include "elements/reusable/follow_us.html" %}
+
+{% endblock %}
+
+{% block after_content %}{% endblock %}
+
+{% block after_container %}
+
+{% if real_content_id == 'about' %}
+<script> 
+$(document).ready(function() {
+$('.slidewrap').carousel({
+slider: '.slider',
+slide: '.slide',
+slideHed: '.slidehed',
+nextSlide : '.next',
+prevSlide : '.prev',
+addPagination: true,
+addNav : false
+});
+
+});
+</script>	
+{% endif %}
+
+{% endblock %}

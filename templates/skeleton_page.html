@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div id="container" class="{% block container_class %}{% endblock %}">
+		
+		{% include "elements/reusable/topbar.html" %}
+		
+		<div id="mainbody">
+			
+			{% include "elements/reusable/nav_mobile.html" %}
+			
+			{% block before_content %}{% endblock %}
+			
+			<div id="content">
+				
+				{% block different_content %}
+				
+				<div id="{% block real_content_id %}{% endblock %}" class="main">
+					
+					{% block real_content %}{% endblock %}
+					
+				</div>
+				
+				<div id="sidebar">
+					
+					{% block sidebar_content %}{% endblock %}
+					
+				</div> <!-- end of: sidebar -->
+				
+				{% endblock %}
+				
+			</div> <!-- end of: content -->
+			
+			{% block after_content %}{% endblock %}
+			
+			{% include "elements/reusable/testimonials.html" %}
+			
+			{% include "elements/reusable/logos.html" %}
+			
+		</div> <!-- end of: mainbody -->
+		
+		{% include "elements/reusable/footer.html" %}
+		
+		{% include "elements/modals/contact_modal.html" %}
+		
+		{% include "elements/modals/alert_modal.html" %}
+
+		{% include "elements/modals/map_modal.html" %}
+		
+	</div> <!-- end of: container -->
+	
+	{% block after_container %}{% endblock %}
+{% endblock %}
