@@ -136,3 +136,7 @@ def add_rows(template_dict, page_name):
 
 	template_dict['rows'] = results
 	return template_dict
+
+def add_simple_title(template_dict, page_name, lang_code):
+	template_dict['header_text'] = '<h2>' + TextElementTranslation.objects.filter(element_name__element_name = 'title-' + page_name, language__lang_code = lang_code)[0].element_text + '</h2>'
+	return template_dict

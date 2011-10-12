@@ -16,7 +16,7 @@
 				<li><a href="/{{ curr_lang_code }}/about_us/base/">{% gettext pageless-About_us %}</a></li> 
 				<li class="contact"><a href="#">{% gettext pageless-Contact_us %}</a></li> 
 			</ul>
-			<h2>{% gettext pageless-Welcome %}</h2><!-- TODO: Make this part changeable based on page. Also needs customised translation. -->
+			{{ header_text|safe }}
 		</div> <!-- end of: topbar_2 -->
 		<div id="topbar_3"> 
 			<strong>{% gettext pageless-Call_us_now %} +44 (0)208 896 9990</strong> 

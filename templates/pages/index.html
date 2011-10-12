@@ -74,26 +74,8 @@
 				<div id="portal_matrix">
 					<h3>{% gettext index-portal_matrix_header %}</h3>
 					<p>{% gettext index-portal_matrix_description %}</p>
-					<ul>
-						<li><img src="{{ STATIC_URL }}images/logos/zoopla.jpg" alt="Zoopla"></li>
-						<li><img src="{{ STATIC_URL }}images/logos/rightmove.jpg" alt="Rightmove"></li>
-						<li><img src="{{ STATIC_URL }}images/logos/globrix.jpg" alt="Globrix"></li>
-						<li><img src="{{ STATIC_URL }}images/logos/loot.jpg" alt="Loot"></li>
-						<li><img src="{{ STATIC_URL }}images/logos/findaproperty.jpg" alt="Findaproperty"></li>
-						<li><img src="{{ STATIC_URL }}images/logos/primelocation.jpg" alt="Prime Location"></li>
-						<li><img src="{{ STATIC_URL }}images/logos/gumtree.jpg" alt="Gumtree"></li>
-						<li><img src="{{ STATIC_URL }}images/logos/fish4homes.jpg" alt="fish4homes"></li>
-						<li><img src="{{ STATIC_URL }}images/logos/email4property.jpg" alt="email4property"></li>
-						<li><img src="{{ STATIC_URL }}images/logos/ukpropertyshop.jpg" alt="UK Property Shop"></li>
-
-						<li><img src="{{ STATIC_URL }}images/logos/london2let.jpg" alt="london2let"></li>
-						<li><img src="{{ STATIC_URL }}images/logos/estateangels.jpg" alt="estate angels"></li>
-						<li><img src="{{ STATIC_URL }}images/logos/londoneveningstandard.jpg" alt="London Evening Standard"></li>
-						<li><img src="{{ STATIC_URL }}images/logos/zoomf.jpg" alt="Zoomf"></li>
-						<li><img src="{{ STATIC_URL }}images/logos/movetouk.jpg" alt="moveto.co.uk"></li>
-						<li><img src="{{ STATIC_URL }}images/logos/look4aproperty.jpg" alt="look4aproperty.com"></li>
-					</ul>
-				</div> <!-- end of: portal_matrix -->
+					<img src="{{ STATIC_URL }}images/property_matrix.jpg" alt="Property Matrix">
+				</div>  <!-- end of: portal_matrix -->
 			
 				{% include "elements/reusable/twitter_feed.html" %}
 
@@ -104,10 +86,12 @@
 						<img src="{{ STATIC_URL }}images/iphone-ipad.png" alt="iphone app">
 					</a>
 					<a href="#" class="button_2">{% gettext iphone_app-download %}</a>
-
-					{% include "elements/reusable/follow_us.html" %}
-
-				</div> <!-- end of: iphone_app -->
+					<div id="emagazine">
+						<h3>{% gettext monthly_magazine-title %}</h3>
+						<p>{% gettext mothly_magazine-description %}</p>
+						<a href="#" class="button_2">{% gettext monthly_magazine-button %}</a>
+					</div>
+				</div>
 			
 			</div> <!-- end of: portals -->
 		

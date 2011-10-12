@@ -3,6 +3,7 @@ from life.models import *
 from re import sub
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from json import loads as parse_json
 
 def search(request, lang_code):
 	template_dict = generate_base_dict(lang_code, '/search/')

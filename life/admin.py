@@ -1,4 +1,4 @@
-from models import *
+from life.models import *
 from django.contrib import admin
 
 class StaffMemberAdmin(admin.ModelAdmin):
@@ -126,3 +126,10 @@ admin.site.register(ThreePictureRow)
 admin.site.register(FourPictureRow)
 admin.site.register(RealMedia)
 admin.site.register(TabbedMedia)
+
+admin.site.register(NewsLetterSubscription)
+admin.site.register(NewsLetter)
+admin.site.register(EmailAlert)
+
+admin.site.register(Misc)
+admin.site.register(MemberOf)
