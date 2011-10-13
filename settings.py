@@ -2,7 +2,6 @@
 import os
 
 ProjectDir = os.path.realpath(os.path.dirname(__file__))
-print ProjectDir
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -16,7 +15,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': ProjectDir + '/life.db',                      # Or path to database file if using sqlite3.
+        'NAME':  ProjectDir + '/life.db',        # Or path to database file if using sqlite3.
     }
 }
 

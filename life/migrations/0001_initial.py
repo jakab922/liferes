@@ -219,6 +219,38 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('life', ['TabbedMedia'])
 
+        # Adding model 'NewsLetterSubscription'
+        db.create_table('life_newslettersubscription', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('frequency', self.gf('django.db.models.fields.CharField')(max_length=1)),
+            ('email', self.gf('django.db.models.fields.EmailField')(max_length=75)),
+        ))
+        db.send_create_signal('life', ['NewsLetterSubscription'])
+
+        # Adding model 'NewsLetter'
+        db.create_table('life_newsletter', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=30)),
+            ('body', self.gf('django.db.models.fields.TextField')()),
+            ('date', self.gf('django.db.models.fields.DateField')()),
+        ))
+        db.send_create_signal('life', ['NewsLetter'])
+
+        # Adding model 'EmailAlert'
+        db.create_table('life_emailalert', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('sale_type', self.gf('django.db.models.fields.CharField')(max_length=1)),
+            ('location_string', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('type', self.gf('django.db.models.fields.CharField')(max_length=5)),
+            ('min_price', self.gf('django.db.models.fields.IntegerField')()),
+            ('max_price', self.gf('django.db.models.fields.IntegerField')()),
+            ('min_bedroom', self.gf('django.db.models.fields.IntegerField')()),
+            ('max_bedroom', self.gf('django.db.models.fields.IntegerField')()),
+            ('frequency', self.gf('django.db.models.fields.CharField')(max_length=1)),
+            ('email', self.gf('django.db.models.fields.EmailField')(max_length=75)),
+        ))
+        db.send_create_signal('life', ['EmailAlert'])
+
         # Adding model 'PropertyDescription'
         db.create_table('life_propertydescription', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -282,6 +314,14 @@ class Migration(SchemaMigration):
             ('language', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['life.Language'])),
         ))
         db.send_create_signal('life', ['TextElementTranslation'])
+
+        # Adding model 'Misc'
+        db.create_table('life_misc', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('iphone_app_link', self.gf('django.db.models.fields.URLField')(max_length=200)),
+            ('main_phone_number', self.gf('django.db.models.fields.CharField')(max_length=30)),
+        ))
+        db.send_create_signal('life', ['Misc'])
 
     def backwards(self, orm):
         # Deleting model 'Language'
@@ -347,6 +387,15 @@ class Migration(SchemaMigration):
         # Deleting model 'TabbedMedia'
         db.delete_table('life_tabbedmedia')
 
+        # Deleting model 'NewsLetterSubscription'
+        db.delete_table('life_newslettersubscription')
+
+        # Deleting model 'NewsLetter'
+        db.delete_table('life_newsletter')
+
+        # Deleting model 'EmailAlert'
+        db.delete_table('life_emailalert')
+
         # Deleting model 'PropertyDescription'
         db.delete_table('life_propertydescription')
 
@@ -364,6 +413,9 @@ class Migration(SchemaMigration):
 
         # Deleting model 'TextElementTranslation'
         db.delete_table('life_textelementtranslation')
+
+        # Deleting model 'Misc'
+        db.delete_table('life_misc')
 
     models = {
         'life.address': {
@@ -399,6 +451,19 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
             'part': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['life.CityPart']"})
+        },
+        'life.emailalert': {
+            'Meta': {'object_name': 'EmailAlert'},
+            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75'}),
+            'frequency': ('django.db.models.fields.CharField', [], {'max_length': '1'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'location_string': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'max_bedroom': ('django.db.models.fields.IntegerField', [], {}),
+            'max_price': ('django.db.models.fields.IntegerField', [], {}),
+            'min_bedroom': ('django.db.models.fields.IntegerField', [], {}),
+            'min_price': ('django.db.models.fields.IntegerField', [], {}),
+            'sale_type': ('django.db.models.fields.CharField', [], {'max_length': '1'}),
+            'type': ('django.db.models.fields.CharField', [], {'max_length': '5'})
         },
         'life.emptyrow': {
             'Meta': {'object_name': 'EmptyRow'},
@@ -439,6 +504,25 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'lang': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'}),
             'lang_code': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '2'})
+        },
+        'life.misc': {
+            'Meta': {'object_name': 'Misc'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'iphone_app_link': ('django.db.models.fields.URLField', [], {'max_length': '200'}),
+            'main_phone_number': ('django.db.models.fields.CharField', [], {'max_length': '30'})
+        },
+        'life.newsletter': {
+            'Meta': {'object_name': 'NewsLetter'},
+            'body': ('django.db.models.fields.TextField', [], {}),
+            'date': ('django.db.models.fields.DateField', [], {}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'title': ('django.db.models.fields.CharField', [], {'max_length': '30'})
+        },
+        'life.newslettersubscription': {
+            'Meta': {'object_name': 'NewsLetterSubscription'},
+            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75'}),
+            'frequency': ('django.db.models.fields.CharField', [], {'max_length': '1'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
         'life.onecolumnrow': {
             'Meta': {'object_name': 'OneColumnRow'},
