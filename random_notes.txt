@@ -1,9 +1,0 @@
-Add management task to download longitue/lattitude for all the properties.
-Modify the model so there is a table which stores the coordinate for the given elements.
-
-Create the scripts for the map element which includes the following:
-
-- Every page where we can have a map there should be a list of coordinates of all the properties.
-- Zooming and scrolling events shall trigger rechecking of which elements should be included in the list. On the search page this also means the filtering of the currently displayed search results.
-
-That's all folks.

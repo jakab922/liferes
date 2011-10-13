@@ -35,7 +35,7 @@ def add_searchform(template_dict):
 	return template_dict
 	
 def add_testimonials(template_dict):
-	template_dict['testimonials'] = [(t.testimonial.name, t.testimonial.date, t.quote) for t in TestimonialTranslation.objects.filter(language__lang_code = template_dict['curr_lang_code'])]
+	template_dict['testimonials'] = TestimonialTranslation.objects.filter(language__lang_code = template_dict['curr_lang_code'])
 	
 	return template_dict
 	

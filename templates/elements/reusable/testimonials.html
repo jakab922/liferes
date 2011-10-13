@@ -1,9 +1,9 @@
 {% load element_translator %}
 <div id="testimonials">
-	{% for t in testimonials %}
+	{% for t in testimonials|slice:":3" %}
 		<div class="testimonial" id="testimonial_{{ forloop.counter }}">
-			<p>“{{ t.2 }}”</p>
-			<cite>{{ t.0 }}, {{ t.1|date:"M Y" }}</cite>
+			<p>“{{ t.quote }}”</p>
+			<cite>{{ t.testimonial.name }}, {{ t.testimonial.date|date:"M Y" }}</cite>
 		</div> <!-- end of: testimonial_{{ forloop.counter }} -->
 	{% endfor %}
 	<a href="">{% gettext reusable-testimonials-read_more %} &gt;</a>

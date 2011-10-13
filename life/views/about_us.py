@@ -12,9 +12,11 @@ def about_us(request, subpage, lang_code):
 
 	if subpage == 'base':
 		template_dict['header_text'] = '<h2>{0}</h2>'.format(about_us)
+		template_dict = add_rows(template_dict, 'about_us')
 	elif subpage == 'recruitment':
 		recruitment = tet.objects.filter(element_name__element_name = 'subtitle-about_us-recruitment', language__lang_code = lang_code)[0].element_text
 		template_dict['container_class'] = '<h2>{0} <span>{1}</span></h2>'.format(about_us, recruitment)
+		template_dict = add_rows(template_dict, 'about_us-recruitment')
 	elif subpage == 'testimonials':
 		testimonials = tet.objects.filter(element_name__element_name = 'subtitle-about_us-testimonials', language__lang_code = lang_code)[0].element_text
 		template_dict['container_class'] = '<h2>{0} <span>{1}</span></h2>'.format(about_us, testimonials)
