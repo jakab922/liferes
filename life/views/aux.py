@@ -8,8 +8,8 @@ def generate_base_dict(lang_code, pagename):
 			languages.remove(language)
 			languages = [language] + languages
 			break
-	
-	return {'pagename': pagename, 'curr_lang_code': lang_code, 'curr_lang': Language.objects.filter(lang_code = lang_code)[0].lang, 'curr_flag': Language.objects.filter(lang_code = lang_code)[0].flag, 'languages': languages}
+
+	return {'pagename': pagename, 'curr_lang_code': lang_code, 'curr_lang': Language.objects.filter(lang_code = lang_code)[0].lang, 'curr_flag': Language.objects.filter(lang_code = lang_code)[0].flag, 'languages': languages, 'misc': Misc.objects.all()[0]}
 	
 
 def add_searchform(template_dict):
