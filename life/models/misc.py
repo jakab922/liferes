@@ -4,6 +4,8 @@ class Misc(models.Model):
 	iphone_app_link = models.URLField()
 	
 	main_phone_number = models.CharField(max_length = 30)
+	main_contact_email = models.EmailField()
+	faq_contact_email = models.EmailField()
 
 	twitter_username = models.CharField(max_length = 30)
 	twitter_pass = models.CharField(max_length = 30)

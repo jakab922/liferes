@@ -6,35 +6,18 @@
 
 {% block real_content_id %}tenants{% endblock %}
 
+{% load element_translator %}
 {% block real_content %}
 
-<div id="map" class="single article"> <!-- TODO: Should be stored in some database. -->
-	
-	<div class="map_description col1">
-		<div class="faq">
-		<h2>Tax advice for overseas landlords</h2>
-		<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-		</p>
-		<a class="button_2 contact" href="#">Contact us for more information</a>
-		</div>
-		
-		<div class="faq">
-		<h2>Furnishing</h2>
-		<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-		</p>
-		<a class="button_2 contact" href="#">Contact us for more information</a>
-		</div>
-		
-		<div class="faq">
-		<h2>Tax advice for overseas landlords</h2>
-		<p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-		</p>
-		<a class="button_2 contact" href="#">Contact us for more information</a>
-		</div>
-
+{% for faq in faqs %}
+<div class="row_1col">
+	<div class="faq-item">	
+		<h2>{{ faq.question }}</h2>
+		<p>{{ faq.answer }}</p>
+		<a class="button_2 contact" href="mailto:{{ misc.faq_contact_email }}?subject={{ faq.question }}">{% gettext faq-contact_button_text %}</a>
 	</div>
-
 </div>
+{% endfor %}
 
 {% endblock %}
 
