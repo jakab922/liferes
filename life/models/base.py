@@ -18,7 +18,7 @@ class StaffMember(models.Model):
 	language = models.ManyToManyField('Language')
 	
 	def __unicode__(self):
-		return unicode((self.id, self.name))
+		return unicode(self.name)
 
 	class Meta:
 		app_label = "life"

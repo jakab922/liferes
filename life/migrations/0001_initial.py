@@ -105,6 +105,14 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('life', ['District'])
 
+        # Adding model 'MemberOf'
+        db.create_table('life_memberof', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('staff', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['life.StaffMember'])),
+            ('branch', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['life.Branch'])),
+        ))
+        db.send_create_signal('life', ['MemberOf'])
+
         # Adding model 'Page'
         db.create_table('life_page', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -315,14 +323,6 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('life', ['TextElementTranslation'])
 
-        # Adding model 'Misc'
-        db.create_table('life_misc', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('iphone_app_link', self.gf('django.db.models.fields.URLField')(max_length=200)),
-            ('main_phone_number', self.gf('django.db.models.fields.CharField')(max_length=30)),
-        ))
-        db.send_create_signal('life', ['Misc'])
-
     def backwards(self, orm):
         # Deleting model 'Language'
         db.delete_table('life_language')
@@ -356,6 +356,9 @@ class Migration(SchemaMigration):
 
         # Deleting model 'District'
         db.delete_table('life_district')
+
+        # Deleting model 'MemberOf'
+        db.delete_table('life_memberof')
 
         # Deleting model 'Page'
         db.delete_table('life_page')
@@ -413,9 +416,6 @@ class Migration(SchemaMigration):
 
         # Deleting model 'TextElementTranslation'
         db.delete_table('life_textelementtranslation')
-
-        # Deleting model 'Misc'
-        db.delete_table('life_misc')
 
     models = {
         'life.address': {
@@ -505,11 +505,11 @@ class Migration(SchemaMigration):
             'lang': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'}),
             'lang_code': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '2'})
         },
-        'life.misc': {
-            'Meta': {'object_name': 'Misc'},
+        'life.memberof': {
+            'Meta': {'object_name': 'MemberOf'},
+            'branch': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['life.Branch']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'iphone_app_link': ('django.db.models.fields.URLField', [], {'max_length': '200'}),
-            'main_phone_number': ('django.db.models.fields.CharField', [], {'max_length': '30'})
+            'staff': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['life.StaffMember']"})
         },
         'life.newsletter': {
             'Meta': {'object_name': 'NewsLetter'},
