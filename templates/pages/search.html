@@ -273,6 +273,10 @@ $(window).load(function () {
 		<a id="shortlist_button_{{ result.property_id }}" class="button_1" href="">{% gettext search-Add_to_shortlist %}</a>
 	</div>
 </div>
+{% empty %}
+<div class="result">
+<h2>There are no properties matching your search criteria!</h2>
+</div>
 {% endfor %}
 <script type="text/javascript">
 var property_ids = {{ property_ids }};
@@ -372,8 +376,6 @@ $(window).load(function () {
 {% include "elements/reusable/newsletter.html" %}
 	
 {% include "elements/reusable/iphone_app.html" %}
-
-{% include "elements/reusable/follow_us.html" %}
 
 {% endblock %}
 
