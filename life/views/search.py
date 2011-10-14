@@ -6,7 +6,7 @@ from django.template import RequestContext
 from json import loads as parse_json
 
 def search(request, lang_code):
-	template_dict = generate_base_dict(lang_code, '/search/')
+	template_dict = generate_base_dict(lang_code, 'search')
 	if request.method == 'POST':
 		query_dict = {}
 

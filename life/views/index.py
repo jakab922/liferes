@@ -4,7 +4,7 @@ from life.models import *
 from django.template import RequestContext
 
 def index(request, lang_code):
-	template_dict = generate_base_dict(lang_code, '/')
+	template_dict = generate_base_dict(lang_code, 'index')
 	
 	template_dict = add_searchform(template_dict)
 	template_dict = add_staff(template_dict)

@@ -13,9 +13,12 @@ class Language(models.Model):
 
 class StaffMember(models.Model):
 	name = models.CharField(max_length = 200)
+	position = models.CharField(max_length = 40)
 	email = models.EmailField()
+	linkedin_link = models.URLField()
 	thumbnail = models.ImageField(upload_to = 'images/thumbnails')
 	language = models.ManyToManyField('Language')
+	introduction = models.TextField()
 	
 	def __unicode__(self):
 		return unicode(self.name)

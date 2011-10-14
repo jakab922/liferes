@@ -6,7 +6,7 @@ from json import loads as parse_json
 from django.template import RequestContext
 
 def detail(request, lang_code, prop_id):
-	template_dict = generate_base_dict(lang_code, '/detail/')
+	template_dict = generate_base_dict(lang_code, 'detail')
 
 	if request.method == 'POST' and 'property_ids' in request.POST:
 		template_dict['property_ids'] = parse_json(request.POST['property_ids'])

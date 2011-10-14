@@ -6,7 +6,7 @@ def city_guide(request, area, lang_code):
 	if area not in ['central']:
 		area = 'all'
 	
-	template_dict = generate_base_dict(lang_code, '/city_guide/' + area + '/')
+	template_dict = generate_base_dict(lang_code, 'city_guide-' + area)
 	
 	template_dict['area_name'] = area
 		

@@ -6,9 +6,88 @@
 
 {% block real_content_id %}{{ real_content_id }}{% endblock %}
 
+{% load element_translator %}
 {% block real_content %}
 
+{% if page_name == 'about_us-our_staff' %}
+
+<div class="feature_section">
+	
+	<div class="staff_feature">
+		<img src="{{ STATIC_URL }}images/staff_feature_picture_1.jpg" alt="Staff Member">
+		<h3 class="staff_name">Jonathan Werth <span class="position">{% gettext searchboxes-our_staff-dirfund %}</span></h3>
+		<p>{% gettext searchboxes-our_staff-werth_description %}</p>
+		<span class="email"><a href="#">Email Jonathon &gt;</a></span>
+	</div>
+	
+	<div class="staff_feature">
+		<img src="{{ STATIC_URL }}images/staff_feature_picture_2.jpg" alt="Staff Member">
+		<h3 class="staff_name">Jason Dienaar <span class="position">{% gettext searchboxes-our_staff-dirfund %}</span></h3>
+		<p>{% gettext searchboxes-our_staff-dienaar_description %}</p>
+		<span class="email"><a href="#">Email Jason &gt;</a></span>
+	</div>
+	
+</div>
+
+{% for branch in branches %}
+	
+	<div class="entry">
+
+		<div class="entry_header" id="office_location">
+
+			<div class="column">
+				<h3>{{ branch.name }}</h3>
+				<ul> 
+					<li>T :  {{ branch.phone }}</li>
+					<li>F :  {{ branch.fax }}</li>
+					<li>E :  <a href="mailto:{{ branch.email }}">{{ branch.email }}</a></li>
+				</ul>
+			</div>
+
+			<div class="column">
+				<h3>{% gettext pageless-View_map %} &gt;</h3> <!-- TODO: create map link + javascript for this.. -->
+				<ul>
+					<li>{{ branch.address.address }}</li>
+					<li>{{ branch.address.city }}, {{ branch.adress.postcode }}</li>
+				</ul>
+			</div>
+
+		</div>
+
+		{% for member in branch.members %}
+			<div class="entry_detail">
+
+				<div class="col1">
+					<img src="{{ MEDIA_URL }}{{ member.thumbnail }}" alt="{% gettext about_us-our_staff-image_alt %}">
+				</div>
+
+				<div class="col2">
+					<ul>
+						<li><h4>{{ member.name }}</h4>
+							<p>{{ member.position }}</p></li>
+						<li><h4>{% gettext about_us-our_staff-Languages %}</h4>
+							<p>{% for language in member.languages %}{{language.lang}}{% if not forloop.last %}, {% endif %}{% endfor %}</p></li>
+						<li><a href="mailto:{{ member.email }}">{% gettext about_us-our_staff-Email %} {{ member.name }} &gt;</a></li>
+					</ul>
+				</div>
+
+				<div class="col3">
+					<p>{{ member.introduction }}</p>
+					<a class="linkedin" href="{{ member.linkedin_link }}"><img src="{{ STATIC_URL }}images/linkedin_icon_black.png">{% gettext about_us-our_staff-linkedin_link %}</a>
+				</div>
+
+			</div>
+		{% endfor %}
+		
+	</div> 
+	
+{% endfor %}
+
+{% else %}
+
 {% include "elements/reusable/row_content.html" %}
+
+{% endif %}
 
 {% endblock %}
 
@@ -17,8 +96,6 @@
 {% include "elements/searchboxes/about_us.html" %}
 
 {% include "elements/reusable/iphone_app.html" %}
-
-{% include "elements/reusable/follow_us.html" %}
 
 {% endblock %}
 
