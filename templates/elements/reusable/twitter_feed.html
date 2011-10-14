@@ -1,57 +1,19 @@
-<!-- TODO: Maybe some translation is needed . This should be replaced with the real twitter feed. -->
+{% load element_translator %}
 <div id="twitter_feed">
 	<h3>Twitter</h3>
 	<ul>
+		{% for tweet in tweets %}
 		<li>
-			<p>interesting article here on the rent demand gap. Well I think it's interesting ... <a href="">http://t.co/dNbDrRb</a></p>
-			<p class="meta"><span class="tweet_date">7 days ago -</span>
-				<a href="#">reply -</a>
-				<a href="#">retweet -</a>
-				<a href="#">favourite</a>
+			<p>{{ tweet.content }}</a></p>
+			<p class="meta"><span class="tweet_date">{{ tweet.date }} -</span>
+				<a href="{{ tweet.reply_link }}">{% gettext twitter-reply %} -</a>
+				<a href="{{ tweet.retweet_link }}">{% gettext twitter-retweet %} -</a>
+				<a href="{{ tweet.favourite_link }}">{% gettext twitter-favourite %}</a>
 			</p>
 		</li>
-		<li>
-			<p>interesting article here on the rent demand gap. Well I think it's interesting ... <a href="">http://t.co/dNbDrRb</a></p>
-			<p class="meta"><span class="tweet_date">7 days ago -</span>
-				<a href="#">reply -</a>
-				<a href="#">retweet -</a>
-				<a href="#">favourite</a>
-			</p>
-		</li>
-		<li>
-			<p>interesting article here on the rent demand gap. Well I think it's interesting ... <a href="">http://t.co/dNbDrRb</a></p>
-			<p class="meta"><span class="tweet_date">7 days ago -</span>
-				<a href="#">reply -</a>
-				<a href="#">retweet -</a>
-				<a href="#">favourite</a>
-			</p>
-		</li>
-		<li>
-			<p>interesting article here on the rent demand gap. Well I think it's interesting ... <a href="">http://t.co/dNbDrRb</a></p>
-			<p class="meta"><span class="tweet_date">7 days ago -</span>
-				<a href="#">reply -</a>
-				<a href="#">retweet -</a>
-				<a href="#">favourite</a>
-			</p>
-		</li>
-		<li>
-			<p>interesting article here on the rent demand gap. Well I think it's interesting ... <a href="">http://t.co/dNbDrRb</a></p>
-			<p class="meta"><span class="tweet_date">7 days ago -</span>
-				<a href="#">reply -</a>
-				<a href="#">retweet -</a>
-				<a href="#">favourite</a>
-			</p>
-		</li>
-		<li>
-			<p>interesting article here on the rent demand gap. Well I think it's interesting ... <a href="">http://t.co/dNbDrRb</a></p>
-			<p class="meta"><span class="tweet_date">7 days ago -</span>
-				<a href="#">reply -</a>
-				<a href="#">retweet -</a>
-				<a href="#">favourite</a>
-			</p>
-		</li>
+		{% endfor %}
 	</ul>
 
-	<a href="http://twitter.com/liferes" class="button">
-	Follow us <img src="{{ STATIC_URL }}images/twitter_icon.png" alt="follow us"></a>
+	<a href="{{ twitter_follow }}" class="button">
+	{% gettext twitter-follow %} <img src="{{ STATIC_URL }}images/twitter_icon.png" alt="{% gettext twitter-follow %}"></a>
 </div>

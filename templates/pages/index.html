@@ -1,7 +1,12 @@
-<!-- TODO: Add translations to this page -->
 {% extends "base.html" %}
 
+
 {% load element_translator %}
+{% block extra_scripts %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/topbar.js" ></script>
+{% endblock %}
+
+
 {% block content %}
 	<div id="container" class="home">
 		{% include "elements/reusable/topbar.html" %}

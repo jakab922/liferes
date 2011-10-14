@@ -1,5 +1,9 @@
 from life.models import *
 from re import sub
+from urllib import urlopen
+from json import loads
+from collections import namedtuple
+from re import match
 
 def generate_base_dict(lang_code, pagename):
 	languages = [(langobj.lang_code, langobj.lang) for langobj in Language.objects.all()]
@@ -140,4 +144,28 @@ def add_rows(template_dict, page_name):
 
 def add_simple_title(template_dict, page_name, lang_code):
 	template_dict['header_text'] = '<h2>' + TextElementTranslation.objects.filter(element_name__element_name = 'title-' + page_name, language__lang_code = lang_code)[0].element_text + '</h2>'
+	return template_dict
+
+def add_tweets(template_dict):
+	misc = Misc.objects.all()[0]
+	data = urlopen('http://search.twitter.com/search.json?q=' + misc.twitter_username + '&p=1&rpp=6').read()
+	results = loads(data)['results']
+	template_dict['tweets'] = []
+
+	for result in results:
+		t = {}
+		id = result["id_str"];
+		t['reply_link'] = "https://twitter.com/intent/tweet?in_reply_to=" + id;
+		t['retweet_link'] = "https://twitter.com/intent/retweet?tweet_id=" + id;
+		t['favourite_link'] = "https://twitter.com/intent/favorite?tweet_id=" + id;
+		t['date'] = match(r'^[a-zA-Z]+, ([0-9]+ [a-zA-Z]+) .*', result['created_at']).group(1)
+		t['content'] = result['text']
+
+		template_dict['tweets'].append(t)
+
+	return template_dict
+
+def add_twitter_follow(template_dict):
+	template_dict['twitter_follow'] = 'https://twitter.com/intent/user?screen_name=' + Misc.objects.all()[0].twitter_username
+
 	return template_dict
