@@ -148,8 +148,8 @@ def add_simple_title(template_dict, page_name, lang_code):
 
 def add_tweets(template_dict):
 	misc = Misc.objects.all()[0]
-	data = urlopen('http://search.twitter.com/search.json?q=' + misc.twitter_username + '&p=1&rpp=6').read()
-	results = loads(data)['results']
+	data = urlopen('https://api.twitter.com/1/statuses/user_timeline.json?count=6&screen_name=' + misc.twitter_username).read()
+	results = loads(data)
 	template_dict['tweets'] = []
 
 	for result in results:
@@ -158,7 +158,7 @@ def add_tweets(template_dict):
 		t['reply_link'] = "https://twitter.com/intent/tweet?in_reply_to=" + id;
 		t['retweet_link'] = "https://twitter.com/intent/retweet?tweet_id=" + id;
 		t['favourite_link'] = "https://twitter.com/intent/favorite?tweet_id=" + id;
-		t['date'] = match(r'^[a-zA-Z]+, ([0-9]+ [a-zA-Z]+) .*', result['created_at']).group(1)
+		t['date'] = match(r'^[a-zA-Z]+ ([a-zA-Z]+ [0-9]+) .*', result['created_at']).group(1)
 		t['content'] = result['text']
 
 		template_dict['tweets'].append(t)
