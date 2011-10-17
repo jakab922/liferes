@@ -245,10 +245,12 @@ ul.slidecontrols li a {
 	width: 29px;
 	text-indent: -9999px;
 	background: url(../images/rightarrow.png) no-repeat;
+  z-index: 1;
 }
 
 ul.slidecontrols li:first-child a {
 	background: url(../images/leftarrow.png) no-repeat;
+  z-index: 1;
 }
 
 /* -----------------------------

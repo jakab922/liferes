@@ -21,21 +21,23 @@ def add_searchform(template_dict):
 	# TODO: should change after adding translations and shit...
 	template_dict['searchform_types'] = type_choices
 	
-	template_dict['sales_min_prices'] = [25000 * i for i in range(1,17)] + [450000] + [i * 100000 for i in range(5,10)]
-	template_dict['sales_max_prices'] = [25000 * i for i in range(2,17)] + [450000] + [i * 100000 for i in range(5,10)] + [1000000]
-	template_dict['rentals_min_prices'] = [250 * i for i in range(1,9)] + [500 * i for i in range(5,10)]
-	template_dict['rentals_max_prices'] = [250 * i for i in range(2,9)] + [500 * i for i in range(5,10)] + [5000]
-	
-	template_dict['min_bedrooms'] = [i for i in range(7)]
-	template_dict['max_bedrooms'] = [i for i in range(1,8)]
+	template_dict['sales_prices'] = [25000 * i for i in range(1,17)] + [450000] + [i * 100000 for i in range(5,11)]
+	template_dict['rentals_prices'] = [250 * i for i in range(1,9)] + [500 * i for i in range(5,11)]
+	template_dict['bedrooms'] = [i for i in range(8)]
+	template_dict['max_options'] = range(max(len(template_dict['sales_prices']), len(template_dict['rentals_prices']), len(template_dict['bedrooms'])) + 1)
 
-	if 'property_ids' in template_dict:
-		template_dict = add_map_details(template_dict)
-		print "We've got some property ids"
-	else:
-		print "We have no property ids"
-		template_dict['property_ids'] = []
-		template_dict['property_coords'] = []
+	template_dict['all_property_ids'] = [p.property_id for p in Property.objects.all()]
+	template_dict['all_property_coords'] = {}
+	for pid in template_dict['all_property_ids']:
+		c = PropertyCoordinate.objects.filter(property__property_id = pid)[0]
+		lng = c.longitude
+		lat = c.latitude
+		template_dict['all_property_coords'][pid] = {'lng': lng, 'lat': lat}
+
+	template_dict['all_properties'] = Property.objects.all()
+	for p in template_dict['all_properties']:
+		p.description = PropertyDescription.objects.filter(language__lang_code = template_dict['curr_lang_code'], property__property_id = p.property_id)[0].description
+		p.thumb = sub(r'(.*/)([^/]+)', r'\1searchpage/\2', PropertyThumbnail.objects.filter(property__property_id = p.property_id)[0].image.name)
 
 	return template_dict
 	
@@ -47,19 +49,6 @@ def add_testimonials(template_dict):
 def add_staff(template_dict):
 	template_dict['staff'] = StaffMember.objects.all()
 
-	return template_dict
-
-def add_map_details(template_dict):
-	coords = []
-
-	for prop_id in template_dict['property_ids']:
-		print type(prop_id), prop_id
-		ccord = PropertyCoordinate.objects.filter(property__property_id = prop_id)[0]
-		print ccord
-		coords.append(ccord.latitude)
-		coords.append(ccord.longitude)
-
-	template_dict['property_coords'] = coords
 	return template_dict
 
 def add_rows(template_dict, page_name):

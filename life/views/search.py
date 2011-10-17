@@ -34,7 +34,14 @@ def search(request, lang_code):
 	else:
 		template_dict['search_results'] = Property.objects.all().order_by('price')
 
-	template_dict['property_ids'] = [p.property_id for p in template_dict['search_results']]
+	template_dict['found_property_ids'] = [p.property_id for p in template_dict['search_results']]
+	
+	template_dict['found_property_coords'] = {}
+	for pid in template_dict['found_property_ids']:
+		c = PropertyCoordinate.objects.filter(property__property_id = pid)[0]
+		lng = c.longitude
+		lat = c.latitude
+		template_dict['found_property_coords'][pid] = {'lng': lng, 'lat': lat}
 
 	# Gathering images for the properties
 	for i in range(len(template_dict['search_results'])):

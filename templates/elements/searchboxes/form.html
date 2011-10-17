@@ -1,74 +1,15 @@
-<!-- TODO: Translation is needed and it should be generated from a django form. -->
 <!-- TODO: Alert box should be droppable. -->
 {% load element_translator %}
 <form id="search" action="/{{ curr_lang_code }}/search/" method="post">
 	{% csrf_token %} 
 	<h2>{% gettext searchboxes-form-header %}</h2>
 	<fieldset id="fieldset_1">
-		{% gettext searchboxes-radio-Renting %} <input type="radio" name="sale_type" value="R" checked="">
-		{% gettext searchboxes-radio-Buying %} <input type="radio" name="sale_type" value="S">
+		{% gettext searchboxes-radio-Renting %} <input id="sale_type_radio_R" type="radio" name="sale_type" value="R" checked="">
+		{% gettext searchboxes-radio-Buying %} <input id="sale_type_radio_S" type="radio" name="sale_type" value="S">
 		
 		<label for="district">{% gettext searchboxes-form-location_label %}</label>
 		<input type="text" name="district" placeholder="{% gettext searchboxes-form-location_placeholder %}">
-		<p>View <a href="{{ curr_lang_code }}/city_guide/all/">London area guide</a> or search by <a href="#" id="search_by_map_link" >Map</a></p>
-		<script type="text/javascript">
-			var search_map_not_ready = true;
-
-			var property_coords = [{% for coord in property_coords %}{{ coord }}{% if not forloop.last %}, {% endif %}{% endfor %}]; 
-			var hidden_properties = [{% for coord in property_ids %}-1{% if not forloop.last %}, {% endif %}{% endfor %}];
-
-
-			$(window).load(function () {
-				$(document).keyup(function (e) {
-					if(e.keyCode == 27) {
-						$('div#map_modal').fadeOut();
-					}
-				});
-
-				$('div#map_modal .close').click(function () {
-					$('div#map_modal').fadeOut();
-				});
-
-				$('a#search_by_map_link').click(function (event) {
-					event.preventDefault();
-
-					$('div#map_modal').fadeIn();
-					if(property_ids.length != 0) {
-						if(search_map_not_ready) {
-							search_map_not_ready = false;
-
-							var latlng = new google.maps.LatLng(51.50015240, -0.12623620);
-							var options = {
-								zoom: 11,
-								center: latlng,
-								mapTypeId: google.maps.MapTypeId.HYBRID
-							};
-							var map = new google.maps.Map($('div#map_box').get(0), options);
-							
-							for(var i = 0; i < property_ids.length; i++) {
-								latlng = new google.maps.LatLng(property_coords[2 * i], property_coords[2 * i + 1]);
-								marker = new google.maps.Marker({position: latlng, map: map, title: 'No title', icon: 'https://chart.googleapis.com/chart?chst=d_map_pin_icon&chld=home|ffffff|000000'});
-								marker.map = map
-								google.maps.event.addListener(marker, 'click', function () {
-									var iw = new google.maps.InfoWindow({'content': 'blalbalbl<a href="http://www.google.com">asdf</a>alal<img src="http://www.google.co.uk/images/srpr/logo3w.png"></img>', 'position': this.position });
-									iw.open(marker.map, this);
-								});
-							}
-
-							
-							google.maps.event.addListener(map, 'bounds_changed', function () {
-								for(var i = 0; i < property_ids.length; i++) {
-									
-								}
-							});
-							console.log('We have some property ids')
-						}
-					} else {
-						console.log('We need some property ids')
-					}
-				});
-			});
-		</script>
+		<p>View <a href="/{{ curr_lang_code }}/city_guide/all/">London area guide</a> or search by <a href="#" id="search_by_map_link" >Map</a></p>
 	</fieldset>
 	<fieldset id="fieldset_2">
 		<label for="property_type">{% gettext searchboxes-form-property_type_label %}</label>
@@ -85,41 +26,21 @@
 		<label for="price">{% gettext searchboxes-form-price_label %}</label>
 		{% gettext searchboxes-form-From %} 
 		<select id="min_price-select" name="min_price">
-				<option selected="selected" value="0">{% gettext searchboxes-form-min %}</option>
-				{% for num in rentals_min_prices %}
-					<option value="{{ num }}">{{ num }}</option>
-				{% endfor %}
+				{% for i in max_options %}<option value="-1" style="display: none;"></option>{% endfor %}
 		</select>
 		{% gettext searchboxes-form-To %} 
 		<select id="max_price-select" name="max_price">
-			<option selected="selected" value="9999999999">{% gettext searchboxes-form-max %}</option>
-			{% for num in rentals_max_prices %}
-				{% if forloop.last %}
-				<option value="9999999999">{{ num }}+</option>
-				{% else %}
-				<option value="{{ num }}">{{ num }}</option>
-				{% endif %}
-			{% endfor %}
+			{% for i in max_options %}<option value="-1" style="display: none;"></option>{% endfor %}
 		</select>
 		
 		<label for="number_of_bedrooms">{% gettext searchboxes-form-bedroom_label %}</label>
 		{% gettext searchboxes-form-From %} 
 		<select id="min_bedrooms-select" name="min_bedrooms">
-			<option selected="selected" value="0">{% gettext searchboxes-form-min %}</option>
-			{% for num in min_bedrooms %}
-				<option value="{{ num }}">{{ num }}</option>
-			{% endfor %}
+			{% for i in max_options %}<option value="-1" style="display: none;"></option>{% endfor %}
 		</select>
 		{% gettext searchboxes-form-To %} 
 		<select id="max_bedrooms-select" name="max_bedrooms">
-			<option selected="selected" value="9999999999">{% gettext searchboxes-form-max %}</option>
-			{% for num in max_bedrooms %}
-				{% if forloop.last %}
-				<option value="9999999999">{{ num }}+</option>
-				{% else %}
-				<option value="{{ num }}">{{ num }}</option>
-				{% endif %}
-			{% endfor %}
+			{% for i in max_options %}<option value="-1" style="display: none;"></option>{% endfor %}
 		</select>
 		
 		<input type="submit" class="button_2" value="{% gettext searchbox-form-search_button %}">
@@ -131,160 +52,3 @@
 
 <div id="dropped_min_bedrooms" style="display: none"></div>
 <div id="dropped_max_bedrooms" style="display: none"></div>
-<script type="text/javascript" charset="utf-8">
-	var min_trans = '{% gettext searchboxes-form-min %}';
-	var max_trans = '{% gettext searchboxes-form-max %}';
-	var sale_type = 'R';
-
-	var sales_min_prices = [{% for num in sales_min_prices %}{{ num }}{% if not forloop.last %},{% endif %}{% endfor %}];
-	var sales_max_prices = [{% for num in sales_max_prices %}{{ num }}{% if not forloop.last %},{% endif %}{% endfor %}]; 
-	var rentals_min_prices = [{% for num in rentals_min_prices %}{{ num }}{% if not forloop.last %},{% endif %}{% endfor %}];
-	var rentals_max_prices = [{% for num in rentals_max_prices %}{{ num }}{% if not forloop.last %},{% endif %}{% endfor %}];
-	
-	var min_bedrooms = [{% for num in min_bedrooms %}{{ num }}{% if not forloop.last %},{% endif %}{% endfor %}];
-	var max_bedrooms = [{% for num in max_bedrooms %}{{ num }}{% if not forloop.last %},{% endif %}{% endfor %}];
-	
-	$('#min_price-select').change(function() {
-		// Removing min from the enabled options if it's there
-		$('#min_price-select option:contains("' + min_trans + '")').remove();
-		
-		// Removing the elements from max list where they are smaller than the current selected element in the min  list.
-		var curr_min_val = parseInt($("#min_price-select option:selected").attr("value"));
-		
-		$('#max_price-select option').not(":contains('" + max_trans + "')").filter(function (index) { 
-			return $(this).attr('value') <= curr_min_val; 
-		}).each(function () {
-			$('#dropped_max_prices').append($(this)); 
-		});
-		
-		// Reinserting elements which again became larger than the current minimum value.
-		var max_select;
-		if($('#max_price-select option:selected').text() == max_trans) {
-			max_select = $('#max_price-select option:selected');
-		} else {
-			max_select = $('#max_price-select');
-		}
-		
-		$($('#dropped_max_prices option').get().reverse()).each(function () {
-			if($(this).text() != max_trans && $(this).attr('value') > curr_min_val) {
-				if(max_select.attr('selected')) {
-					max_select.after($(this));
-				} else {
-					max_select.prepend($(this));
-				}
-				
-			}
-		});
-	});
-	
-	$('#max_price-select').change(function() {
-		// Removing max from the enabled options if it's there
-		$('#max_price-select option:contains("' + max_trans + '")').remove();
-		
-		// Removing the elements from min list where they are smaller than the current selected element in the max list.
-		var curr_max_val = parseInt($("#max_price-select option:selected").attr("value"));
-		
-		$('#min_price-select option').not(":contains('" + min_trans + "')").filter(function (index) {
-			return $(this).attr('value') >= curr_max_val;
-		}).each(function () {
-			$('#dropped_min_prices').append($(this));
-		});
-		
-		// Reinserting elements which again became larger than the current minimum value.
-		$($('#dropped_min_prices option').get().reverse()).filter(function  (index) {
-			return $(this).text() != min_trans && $(this).attr('value') < curr_max_val;
-		}).each(function () {
-			$('#min_price-select').append($(this));
-		});
-	});
-	
-	$('#min_bedrooms-select').change(function() {
-		// Removing min from the enabled options if it's there
-		$('#min_bedrooms-select option:contains("' + min_trans + '")').remove();
-		
-		// Removing the elements from max list where they are smaller than the current selected element in the min  list.
-		var curr_min_val = parseInt($("#min_bedrooms-select option:selected").attr("value"));
-		
-		
-		$('#max_bedrooms-select option').not(":contains('" + max_trans + "')").filter(function (index) { 
-			return $(this).attr('value') <= curr_min_val; 
-		}).each(function () {
-			$('#dropped_max_bedrooms').append($(this)); 
-		});
-		
-		// Reinserting elements which again became larger than the current minimum value.
-		var max_select;
-		if($('#max_bedrooms-select option:selected').text() == max_trans) {
-			max_select = $('#max_bedrooms-select option:selected');
-		} else {
-			max_select = $('#max_bedrooms-select');
-		}
-		
-		$($('#dropped_max_bedrooms option').get().reverse()).each(function () {
-			if($(this).text() != max_trans && $(this).attr('value') > curr_min_val) {
-				if(max_select.attr('selected')) {
-					max_select.after($(this));
-				} else {
-					max_select.prepend($(this));
-				}
-				
-			}
-		});
-	});
-	
-	$('#max_bedrooms-select').change(function() {
-		// Removing max from the enabled options if it's there
-		$('#max_bedrooms-select option:contains("' + max_trans + '")').remove();
-		
-		// Removing the elements from min list where they are smaller than the current selected element in the max list.
-		var curr_max_val = parseInt($("#max_bedrooms-select option:selected").attr("value"));
-		
-		$('#min_bedrooms-select option').not(":contains('" + min_trans + "')").filter(function (index) {
-			return $(this).attr('value') >= curr_max_val;
-		}).each(function () {
-			$('#dropped_min_bedrooms').append($(this));
-		});
-		
-		// Reinserting elements which again became larger than the current minimum value.
-		$($('#dropped_min_bedrooms option').get().reverse()).filter(function  (index) {
-			return $(this).text() != min_trans && $(this).attr('value') < curr_max_val;
-		}).each(function () {
-			$('#min_bedrooms-select').append($(this));
-		});
-	});
-	
-	$("input[name='sale_type']").change(function(){
-		var min_content = '<option selected="selected" value="0">min</option>';
-		var max_content = '<option selected="selected" value="9999999999">max</option>';
-		
-		if($("input[name='sale_type']:checked").val() == 'S') {
-			sale_type = 'S';
-			for(var i = 0; i < sales_min_prices.length; i++) {
-				min_content += '<option value="' + sales_min_prices[i] + '" >' + sales_min_prices[i] + '</option>';
-			}
-			for(var i = 0; i < sales_max_prices.length; i++) {
-				if(i == sales_max_prices.length - 1) {
-					max_content += '<option value="9999999999" >' + sales_max_prices[i] + '</option>';
-				} else {
-					max_content += '<option value="' + sales_max_prices[i] + '" >' + sales_max_prices[i] + '</option>';
-				}
-				
-			}
-		} else {
-			sale_type = 'R';
-			for(var i = 0; i < rentals_min_prices.length; i++) {
-				min_content += '<option value="' + rentals_min_prices[i] + '" >' + rentals_min_prices[i] + '</option>';
-			}
-			for(var i = 0; i < rentals_max_prices.length; i++) {
-				if(i == rentals_max_prices.length - 1) {
-					max_content += '<option value="9999999999" >' + rentals_max_prices[i] + '</option>';
-				} else {
-					max_content += '<option value="' + rentals_max_prices[i] + '" >' + rentals_max_prices[i] + '</option>';
-				}
-				
-			}
-		}
-		$('#min_price-select').html(min_content);
-		$('#max_price-select').html(max_content);
-	});
-</script>

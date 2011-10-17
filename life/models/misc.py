@@ -1,6 +1,7 @@
 from django.db import models
 
 class Misc(models.Model):
+	address = models.CharField(max_length = 50)
 	iphone_app_link = models.URLField()
 	
 	main_phone_number = models.CharField(max_length = 30)

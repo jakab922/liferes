@@ -1,10 +1,13 @@
+{% load element_translator %}
 <html>
 	<head>
 		<meta charset="utf-8" /> 
 		<meta name="viewport" content="width=device-width; initial-scale=1.0;">
 		<title>{% block title %}LIFE Residential{% endblock %}</title>
 		<script src="{{ STATIC_URL }}js/jquery.min.js" type="text/javascript"></script>
+		{% block image_slider %}
 		<script src="{{ STATIC_URL }}js/image_slider_plugin.js" type="text/javascript"></script>
+		{% endblock %}
 		<script src="{{ STATIC_URL }}js/scripts.js" type="text/javascript" charset="utf-8"></script>
 		<script src="{{ STATIC_URL }}js/underscore-min.js" type="text/javascript" charset="utf-8"></script>
 		<script src="{{ STATIC_URL }}js/jquery.cookie.js" type="text/javascript" charset="utf-8"></script>
@@ -15,10 +18,43 @@
 			var csrf_pattern = /.*value='([a-z0-9]+)'.*/g;
 			var csrf_match = csrf_pattern.exec("{% csrf_token %}");
 			var csrf_token = csrf_match[1];
+
+			// Current language code
 			var curr_lang_code = "{{ curr_lang_code }}";
-			console.log(curr_lang_code);
+
+			// Twitter username
 			var twitter_username = "{{ misc.twitter_username }}"
+
+			{% if sales_prices %}
+			// Variable showing that the map needs to be loaded.
+			var search_map_not_ready = true;
+
+			// Variables related to the search form
+			var sales_prices = [{% for sales_price in sales_prices %}{{ sales_price }}{% if not forloop.last %}, {% endif %}{% endfor %}];
+			var rentals_prices = [{% for rentals_price in rentals_prices %}{{ rentals_price }}{% if not forloop.last %}, {% endif %}{% endfor %}];
+			var bedrooms = [{% for bedroom in bedrooms %}{{ bedroom }}{% if not forloop.last %}, {% endif %}{% endfor %}];
+			var all_property_ids = [{% for all_property_id in all_property_ids %}{{ all_property_id }}{% if not forloop.last %}, {% endif %}{% endfor %}];
+			var all_property_coords = { {% for pid,coord in all_property_coords.items %} {{ pid }}: new google.maps.LatLng( {{ coord.lat }}, {{ coord.lng }}) {% if not forloop.last %}, {% endif %} {% endfor %} };
+			var min_text = "{% gettext searchboxes-form-min %}";
+			var max_text = "{% gettext searchboxes-form-max %}";
+
+			var prop_contents = { {% for p in all_properties %} {{ p.property_id }}:[
+			'<div id="info_box">',
+			'<div class="info_text">',
+			'<h4>{{ p.address.address }} - {{ p.address.postcode }}</h4>',
+			'<p>{{ p.description|slice:":80" }}...</p>',
+			'</div>',
+			'<div class="info_pic"><strong class="price">{{ p.price }}£{% if p.sale_type == "R" %}/w{% endif %}</strong>',
+			'<img src="{{ MEDIA_URL }}/{{ p.thumb }}"></div>',
+			'<div class="info_footer"><span class="details"><a href="javascript:info_detail({{ p.property_id }})" id="infowindow_details_link">{% gettext info-detail %}</a></span>',
+			'<span class="shortlist"><a href="javascript:info_shortlist({{ p.property_id }})" >{% gettext info-shortlist %}</a></span></div>',
+			'<div class="info_close">x</div>',
+			'</div>'].join(' '){% if not forloop.last %}, {% endif %}{% endfor %} };
+			{% endif %}
 		</script>
+		<script src="{{ STATIC_URL }}js/search_form.js" type="text/javascript"></script>
+		<script src="{{ STATIC_URL }}js/topbar.js" type="text/javascript"></script>
+		<script src="{{ STATIC_URL }}js/infobubble.js" type="text/javascript"></script>
 		<!-- [if IE]>
 			<script src="{{ STATIC_URL }}js/html5.js" type="text/javascript" charset="utf-8"></script>
 		<![endif]-->
